@@ -72,7 +72,12 @@ export const printTypeMap = typeMap => {
 export const extractTypeMapFromTypeDefs = typeDefs => {
   // TODO accept alternative typeDefs formats (arr of strings, ast, etc.)
   // into a single string for parse, add validatation
-  const astNodes = parse(typeDefs).definitions;
+  let astNodes;
+  if (typeof typeDefs === 'object' && typeDefs.hasOwnProperty('definitions')) {
+    astNodes = typeDefs.definitions;
+  } else {
+    astNodes = parse(typeDefs).definitions;
+  }
   return astNodes.reduce((acc, t) => {
     if (t.name) acc[t.name.value] = t;
     return acc;
